@@ -1,0 +1,33 @@
+Vagrant.configure("2") do |config|
+    config.vm.box = "chenhan/ubuntu-desktop-20.04"
+    config.vm.box_version = "20200424"
+    config.vm.box_download_insecure = true
+    config.vm.provider "virtualbox" do |v|
+        v.gui = true
+        v.linked_clone = false
+    end
+    config.vm.provision "shell", path: "./install.sh"
+  
+  end
+  
+  
+  
+  
+  # To start using your cluster, you need to run the following as a regular user:
+  
+  #   mkdir -p $HOME/.kube
+  #   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  #   sudo chown $(id -u):$(id -g) $HOME/.kube/config
+  
+  # Alternatively, if you are the root user, you can run:
+  
+  #   export KUBECONFIG=/etc/kubernetes/admin.conf
+  
+  # You should now deploy a pod network to the cluster.
+  # Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  #   https://kubernetes.io/docs/concepts/cluster-administration/addons/
+  
+  # Then you can join any number of worker nodes by running the following on each as root:
+  
+  # kubeadm join 172.16.129.128:6443 --token zkog3t.1u2yqm7ua3p3l7ow \
+  #         --discovery-token-ca-cert-hash sha256:4dd00f4a774342c0c96743bc5b609744ad74c5334969f85508e1abbffc0f604c
