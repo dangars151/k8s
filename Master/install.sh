@@ -77,8 +77,11 @@ swapoff -a
 # EOF
 
 sudo apt-get install -y apt-transport-https ca-certificates curl
-sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
-echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+#sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+#echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo rm -f /etc/apt/keyrings/kubernetes.gpg
+curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes.gpg
 sudo apt-get update
 sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
@@ -93,3 +96,6 @@ sudo apt-mark hold kubelet kubeadm kubectl
 # [keyfile]
 # unmanaged-devices=interface-name:cali*;interface-name:tunl*
 # EOF
+
+# fix container runtime is not running https://github.com/containerd/containerd/issues/8139
+# fix loi thieu mem --ignore-preflight-errors=Mem
