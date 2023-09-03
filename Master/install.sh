@@ -96,3 +96,6 @@ sudo apt-mark hold kubelet kubeadm kubectl
 # [keyfile]
 # unmanaged-devices=interface-name:cali*;interface-name:tunl*
 # EOF
+
+# fix container runtime is not running https://github.com/containerd/containerd/issues/8139
+# fix loi thieu mem --ignore-preflight-errors=Mem
