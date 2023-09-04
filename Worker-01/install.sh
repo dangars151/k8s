@@ -97,7 +97,5 @@ sudo apt-mark hold kubelet kubeadm kubectl
 # unmanaged-devices=interface-name:cali*;interface-name:tunl*
 # EOF
 
-# kubeadm init --apiserver-advertise-address= --pod-network-cidr= --ignore-preflight-errors=Mem
 # fix container runtime is not running https://github.com/containerd/containerd/issues/8139
-# /etc/containerd/config.toml enabled_plugin
-# systemctl restart containerd
+# fix loi thieu mem --ignore-preflight-errors=Mem
