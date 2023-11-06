@@ -97,7 +97,33 @@ sudo apt-mark hold kubelet kubeadm kubectl
 # unmanaged-devices=interface-name:cali*;interface-name:tunl*
 # EOF
 
-# kubeadm init --apiserver-advertise-address= --pod-network-cidr= --ignore-preflight-errors=Mem
 # fix container runtime is not running https://github.com/containerd/containerd/issues/8139
 # /etc/containerd/config.toml enabled_plugin
 # systemctl restart containerd
+
+# kubeadm init --apiserver-advertise-address= --pod-network-cidr= 
+
+#To start using your cluster, you need to run the following as a regular user:
+
+#  mkdir -p $HOME/.kube
+#  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+#  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+#Alternatively, if you are the root user, you can run:
+
+#  export KUBECONFIG=/etc/kubernetes/admin.conf
+
+#You should now deploy a pod network to the cluster.
+#Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+#  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+# cai calico
+# kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.3/manifests/tigera-operator.yaml
+# wget https://raw.githubusercontent.com/projectcalico/calico/v3.26.3/manifests/custom-resources.yaml
+# thay doi ip trong file custom-resources.yaml thanh ip khi ifconfig
+# kubectl create -f custom-resources.yaml
+
+#Then you can join any number of worker nodes by running the following on each as root:
+
+#kubeadm join 172.16.129.129:6443 --token 9i68gt.zrojf0qmyohusdu4 \
+#        --discovery-token-ca-cert-hash sha256:f6854fe5d10c4f451d263dcb77a968108abc4b428557c10ec540efffa5c5d9a4 
