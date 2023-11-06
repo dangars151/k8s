@@ -117,6 +117,12 @@ sudo apt-mark hold kubelet kubeadm kubectl
 #Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
 #  https://kubernetes.io/docs/concepts/cluster-administration/addons/
 
+# cai calico
+# kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.3/manifests/tigera-operator.yaml
+# wget https://raw.githubusercontent.com/projectcalico/calico/v3.26.3/manifests/custom-resources.yaml
+# thay doi ip trong file custom-resources.yaml thanh ip khi ifconfig
+# kubectl create -f custom-resources.yaml
+
 #Then you can join any number of worker nodes by running the following on each as root:
 
 #kubeadm join 172.16.129.129:6443 --token 9i68gt.zrojf0qmyohusdu4 \
