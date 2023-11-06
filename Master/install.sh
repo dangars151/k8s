@@ -98,6 +98,26 @@ sudo apt-mark hold kubelet kubeadm kubectl
 # EOF
 
 # kubeadm init --apiserver-advertise-address= --pod-network-cidr= --ignore-preflight-errors=Mem
+
 # fix container runtime is not running https://github.com/containerd/containerd/issues/8139
 # /etc/containerd/config.toml enabled_plugin
 # systemctl restart containerd
+
+#To start using your cluster, you need to run the following as a regular user:
+
+#  mkdir -p $HOME/.kube
+#  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+#  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+#Alternatively, if you are the root user, you can run:
+
+#  export KUBECONFIG=/etc/kubernetes/admin.conf
+
+#You should now deploy a pod network to the cluster.
+#Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+#  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+#Then you can join any number of worker nodes by running the following on each as root:
+
+#kubeadm join 172.17.0.1:6443 --token c1aa2c.qsnu9lt4zs54057j \
+#        --discovery-token-ca-cert-hash sha256:e04bf4cd4b443eb87980c93271f9e8b0fad0e439689ec7aeea7b185b4e0d375a
