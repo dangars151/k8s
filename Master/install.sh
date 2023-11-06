@@ -97,11 +97,11 @@ sudo apt-mark hold kubelet kubeadm kubectl
 # unmanaged-devices=interface-name:cali*;interface-name:tunl*
 # EOF
 
-# kubeadm init --apiserver-advertise-address= --pod-network-cidr= --ignore-preflight-errors=Mem
-
 # fix container runtime is not running https://github.com/containerd/containerd/issues/8139
 # /etc/containerd/config.toml enabled_plugin
 # systemctl restart containerd
+
+# kubeadm init --apiserver-advertise-address= --pod-network-cidr= 
 
 #To start using your cluster, you need to run the following as a regular user:
 
@@ -119,5 +119,5 @@ sudo apt-mark hold kubelet kubeadm kubectl
 
 #Then you can join any number of worker nodes by running the following on each as root:
 
-#kubeadm join 172.17.0.1:6443 --token c1aa2c.qsnu9lt4zs54057j \
-#        --discovery-token-ca-cert-hash sha256:e04bf4cd4b443eb87980c93271f9e8b0fad0e439689ec7aeea7b185b4e0d375a
+#kubeadm join 172.16.129.129:6443 --token 9i68gt.zrojf0qmyohusdu4 \
+#        --discovery-token-ca-cert-hash sha256:f6854fe5d10c4f451d263dcb77a968108abc4b428557c10ec540efffa5c5d9a4 
