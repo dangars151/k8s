@@ -127,3 +127,6 @@ sudo apt-mark hold kubelet kubeadm kubectl
 
 #kubeadm join 172.16.129.129:6443 --token 9i68gt.zrojf0qmyohusdu4 \
 #        --discovery-token-ca-cert-hash sha256:f6854fe5d10c4f451d263dcb77a968108abc4b428557c10ec540efffa5c5d9a4 
+
+# fix loi unable to upgrade connection: pod does not exist!
+# https://medium.com/@mukesh.yadav_86837/how-to-fix-error-unable-to-upgrade-connection-pod-does-not-exist-fa90b7d1e44b
