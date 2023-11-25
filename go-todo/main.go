@@ -25,17 +25,20 @@ func main() {
 		"%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		os.Getenv("MYSQL_USER"),
 		os.Getenv("MYSQL_PASSWORD"),
-		os.Getenv("MYSQL_HOST"),
+		"10.101.114.115", // os.Getenv("MYSQL_HOST")
 		os.Getenv("MYSQL_PORT"),
 		os.Getenv("MYSQL_DATABASE"),
 	)
 
-	fmt.Println(dsn)
+	fmt.Println(22233)
+	fmt.Println("111 dsn ", dsn)
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
+
+	fmt.Println(3344)
 
 	// setup server
 	r := gin.Default()
@@ -76,7 +79,7 @@ func main() {
 		c.JSON(200, task)
 	})
 
-	r.Run("0.0.0.0:8000")
+	r.Run()
 }
 
 type Task struct {

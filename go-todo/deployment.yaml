@@ -12,7 +12,7 @@ spec:
       annotations:
         prometheus.io.scheme: http
         prometheus.io.path: /metrics
-        prometheus.io/port: "5000"
+        prometheus.io/port: "8080"
         prometheus.io/scrape: "true"
       name: go-todo
       labels:
@@ -20,10 +20,11 @@ spec:
     spec:
       containers:
       - name: go-todo
-        image: 12345688/go-todo:latest
+        image: 12345688/go-todo:v0.0.6
         ports:
-        - containerPort: 5000
+        - containerPort: 8080
           name: http
+        imagePullPolicy: Always
         env:
         - name: MYSQL_HOST
           valueFrom:
@@ -34,7 +35,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: mysql-secret
-              key: user
+              key: username
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -50,10 +51,10 @@ spec:
             secretKeyRef:
               name: mysql-secret
               key: port
-      volumeMounts:
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+      volumes:
       - name: varlog
-        mountPath: /var/log
-    volumes:
-    - name: varlog
-      hostPath:
-        path: /var/log
+        hostPath:
+          path: /var/log
