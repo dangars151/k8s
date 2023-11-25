@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-todo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-todo
+  template:
+    metadata:
+      annotations:
+        prometheus.io.scheme: http
+        prometheus.io.path: /metrics
+        prometheus.io/port: "8080"
+        prometheus.io/scrape: "true"
+      name: go-todo
+      labels:
+        app: go-todo
+    spec:
+      containers:
+      - name: go-todo
+        image: 12345688/go-todo:v0.0.6
+        ports:
+        - containerPort: 8080
+          name: http
+        imagePullPolicy: Always
+        env:
+        - name: MYSQL_HOST
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: host
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: username
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: password
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: db
+        - name: MYSQL_PORT
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: port
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+      volumes:
+      - name: varlog
+        hostPath:
+          path: /var/log
