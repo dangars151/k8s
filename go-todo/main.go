@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 	"time"
 
@@ -10,6 +11,10 @@ import (
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/collectors"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func main() {
@@ -40,6 +45,12 @@ func main() {
 
 	fmt.Println(3344)
 
+	// setup prometheus to monitoring
+	reg := prometheus.NewRegistry()
+	reg.MustRegister(collectors.NewGoCollector())
+	reg.MustRegister(collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}))
+	prometheus.Register(requestDurations)
+
 	// setup server
 	r := gin.Default()
 	ginConfig := cors.DefaultConfig()
@@ -57,8 +68,11 @@ func main() {
 		"X-Size",
 	}
 	r.Use(cors.New(ginConfig))
+	r.Use(MiddlewareMetrics())
 
 	// api
+	r.GET("metrics", Metrics)
+
 	group := r.Group("api/todos")
 
 	group.GET("", func(c *gin.Context) {
@@ -86,4 +100,33 @@ type Task struct {
 	ID        int       `json:"id"`
 	Name      string    `json:"name" binding:"required"`
 	CreatedAt time.Time `json:"createdAt"`
+}
+
+var (
+	requestDurations = prometheus.NewHistogramVec(
+		prometheus.HistogramOpts{
+			Name:    "http_request_durations_seconds",
+			Help:    "A histogram of the HTTP request durations in seconds.",
+			Buckets: prometheus.ExponentialBuckets(0.1, 1.5, 5),
+		}, []string{"endpoint", "method"},
+	)
+)
+
+func MiddlewareMetrics() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		now := time.Now()
+		c.Next()
+		end := time.Since(now)
+		requestDurations.WithLabelValues(c.Request.Method, c.Request.URL.Path).Observe(end.Seconds())
+
+		if c.Request.Method == "OPTIONS" {
+			c.Status(http.StatusOK)
+			c.Abort()
+			return
+		}
+	}
+}
+
+func Metrics(c *gin.Context) {
+	promhttp.Handler().ServeHTTP(c.Writer, c.Request)
 }
