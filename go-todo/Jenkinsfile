@@ -43,33 +43,33 @@ pipeline {
 
   stages {
     
-    // stage('Unit Test') {
-    //   steps {
-    //     sh 'echo Unit Test' 
-    //   }
-    // }
+    stage('Unit Test') {
+      steps {
+        sh 'echo Unit Test' 
+      }
+    }
 
-    // stage('Build image') {
-    //   steps{
-    //     container('docker') {
-    //       script {
-    //         sh 'docker build --network=host -t dangars151/go-todo .'
-    //       }
-    //     }
-    //   }
-    // }
+    stage('Build image') {
+      steps{
+        container('docker') {
+          script {
+            sh 'docker build --network=host -t dangars151/go-todo .'
+          }
+        }
+      }
+    }
 
-    // stage('Pushing Image') {
-    //   steps{
-    //     container('docker') {
-    //       script {
-    //         sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-    //         sh 'docker tag dangars151/go-todo 12345688/go-todo'
-    //         sh 'docker push 12345688/go-todo:latest'
-    //       }
-    //     }
-    //   }
-    // }
+    stage('Pushing Image') {
+      steps{
+        container('docker') {
+          script {
+            sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+            sh 'docker tag dangars151/go-todo 12345688/go-todo'
+            sh 'docker push 12345688/go-todo:latest'
+          }
+        }
+      }
+    }
 
     stage('Deploying App to Kubernetes') {
       steps {
