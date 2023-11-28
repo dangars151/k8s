@@ -86,51 +86,27 @@ sudo apt-get update
 sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 
-# sudo apt-get install -y -q kubeadm kubelet kubectl
-
-# systemctl enable kubelet
-# systemctl start kubelet
-
-# # Configure NetworkManager before attempting to use Calico networking.
-# cat >>/etc/NetworkManager/conf.d/calico.conf<<EOF
-# [keyfile]
-# unmanaged-devices=interface-name:cali*;interface-name:tunl*
-# EOF
-
-# fix container runtime is not running https://github.com/containerd/containerd/issues/8139
+# Fix container runtime is not running https://github.com/containerd/containerd/issues/8139
 # /etc/containerd/config.toml enabled_plugin
 # systemctl restart containerd
 
+
+# Khởi tạo Master
 # kubeadm init --apiserver-advertise-address= --pod-network-cidr= 
+# To start using your cluster, you need to run the following as a regular user:
+# mkdir -p $HOME/.kube
+# sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+# sudo chown $(id -u):$(id -g) $HOME/.kube/config
+# Alternatively, if you are the root user, you can run:
+# export KUBECONFIG=/etc/kubernetes/admin.conf
 
-#To start using your cluster, you need to run the following as a regular user:
 
-#  mkdir -p $HOME/.kube
-#  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-#  sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
-#Alternatively, if you are the root user, you can run:
-
-#  export KUBECONFIG=/etc/kubernetes/admin.conf
-
-#You should now deploy a pod network to the cluster.
-#Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
-#  https://kubernetes.io/docs/concepts/cluster-administration/addons/
-
-# cai calico
+# Cài Calico network
 # kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.3/manifests/tigera-operator.yaml
 # wget https://raw.githubusercontent.com/projectcalico/calico/v3.26.3/manifests/custom-resources.yaml
 # thay doi ip trong file custom-resources.yaml thanh ip khi ifconfig
 # kubectl create -f custom-resources.yaml
 
-#Then you can join any number of worker nodes by running the following on each as root:
 
-#kubeadm join 172.16.129.129:6443 --token 9i68gt.zrojf0qmyohusdu4 \
-#        --discovery-token-ca-cert-hash sha256:f6854fe5d10c4f451d263dcb77a968108abc4b428557c10ec540efffa5c5d9a4 
-
-# fix loi unable to upgrade connection: pod does not exist!
-# https://medium.com/@mukesh.yadav_86837/how-to-fix-error-unable-to-upgrade-connection-pod-does-not-exist-fa90b7d1e44b
-# nano /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
-# Environment="KUBELET_EXTRA_ARGS=--node-ip=172.16.129.128"
-# systemctl daemon-reload
-# systemctl restart kubelet
+# Then you can join any number of worker nodes by running the following on each as root:
+# kubeadm join 172.16.129.129:6443 --token 9i68gt.zrojf0qmyohusdu4 --discovery-token-ca-cert-hash sha256:f6854fe5d10c4f451d263dcb77a968108abc4b428557c10ec540efffa5c5d9a4 

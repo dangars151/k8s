@@ -86,16 +86,14 @@ sudo apt-get update
 sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 
-# sudo apt-get install -y -q kubeadm kubelet kubectl
 
-# systemctl enable kubelet
-# systemctl start kubelet
+# Fix container runtime is not running https://github.com/containerd/containerd/issues/8139
+# /etc/containerd/config.toml enabled_plugin
+# systemctl restart containerd
 
-# # Configure NetworkManager before attempting to use Calico networking.
-# cat >>/etc/NetworkManager/conf.d/calico.conf<<EOF
-# [keyfile]
-# unmanaged-devices=interface-name:cali*;interface-name:tunl*
-# EOF
-
-# fix container runtime is not running https://github.com/containerd/containerd/issues/8139
-# fix loi thieu mem --ignore-preflight-errors=Mem
+# Fix lỗi unable to upgrade connection: pod does not exist!
+# https://medium.com/@mukesh.yadav_86837/how-to-fix-error-unable-to-upgrade-connection-pod-does-not-exist-fa90b7d1e44b
+# nano /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+# Environment="KUBELET_EXTRA_ARGS=--node-ip=172.16.129.128"
+# systemctl daemon-reload
+# systemctl restart kubelet

@@ -35,15 +35,10 @@ func main() {
 		os.Getenv("MYSQL_DATABASE"),
 	)
 
-	fmt.Println(22233)
-	fmt.Println("111 dsn ", dsn)
-
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
-
-	fmt.Println(3344)
 
 	// setup prometheus to monitoring
 	reg := prometheus.NewRegistry()
